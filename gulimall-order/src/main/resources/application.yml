@@ -1,0 +1,32 @@
+
+spring:
+  datasource:
+    #    type: com.alibaba.druid.pool.DruidDataSource
+
+
+    #MySQL配置
+    driverClassName: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://127.0.0.1:3306/gulimall_oms?useUnicode=true&characterEncoding=UTF-8&serverTimezone=Asia/Shanghai
+    username: root
+    password: 23981378
+
+  cloud:
+    nacos:
+      discovery:
+        server-addr: 127.0.0.1:8848
+
+  application:
+    name: gulimallorder
+
+
+mybatis-plus:
+  # configure mapper map file location
+  mapper-location: classpath:/mapper/**/*.xml
+  # primary key auto increment
+  global-config:
+    db-config:
+      id-type: auto
+
+
+server:
+  port: 9000

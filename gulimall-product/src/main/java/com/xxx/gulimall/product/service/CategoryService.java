@@ -3,7 +3,9 @@ package com.xxx.gulimall.product.service;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.xxx.common.utils.PageUtils;
 import com.xxx.gulimall.product.entity.CategoryEntity;
+import com.xxx.gulimall.product.vo.Catalog2WebVO;
 
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -16,5 +18,19 @@ import java.util.Map;
 public interface CategoryService extends IService<CategoryEntity> {
 
     PageUtils queryPage(Map<String, Object> params);
+
+    List<CategoryEntity> buildTree();
+
+    void deleteByIds(Long[] catIds);
+
+    List<CategoryEntity> getCategoryList();
+
+    List<CategoryEntity> getCategoryList(List<Long> catIds);
+
+    void update(CategoryEntity category);
+
+    List<CategoryEntity> getCategory1List();
+
+    Map<Long, List<Catalog2WebVO>> getCategory2List();
 }
 

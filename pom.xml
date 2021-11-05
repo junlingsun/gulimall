@@ -7,7 +7,7 @@
     <groupId>com.xxx.gulimall</groupId>
     <artifactId>gulimall</artifactId>
     <version>1.0-SNAPSHOT</version>
-    <description>integrated module</description>
+    <description>base module</description>
 
     <!--create a base container for subprojects-->
     <packaging>pom</packaging>
@@ -17,6 +17,12 @@
         <module>gulimall-order</module>
         <module>gulimall-product</module>
         <module>gulimall-ware</module>
+        <module>renren-fast</module>
+        <module>renren-generator</module>
+        <module>gulimall-common</module>
+        <module>gulimall-gateway</module>
+        <module>gulimall-thirdparty</module>
+        <module>gulimall-elasticsearch</module>
     </modules>
 
 </project>

@@ -1,15 +1,13 @@
 package com.xxx.gulimall.product.controller;
 
 import java.util.Arrays;
+import java.util.List;
 import java.util.Map;
 
 //import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.*;
 
 import com.xxx.gulimall.product.entity.CategoryEntity;
 import com.xxx.gulimall.product.service.CategoryService;
@@ -34,12 +32,13 @@ public class CategoryController {
     /**
      * 列表
      */
-    @RequestMapping("/list")
+    @RequestMapping("/treeList")
     //@RequiresPermissions("product:category:list")
-    public R list(@RequestParam Map<String, Object> params){
-        PageUtils page = categoryService.queryPage(params);
+    public R list(){
+//        PageUtils page = categoryService.queryPage(params);
+        List<CategoryEntity> tree = categoryService.buildTree();
 
-        return R.ok().put("page", page);
+        return R.ok().put("data", tree);
     }
 
 
@@ -68,10 +67,22 @@ public class CategoryController {
     /**
      * 修改
      */
+
     @RequestMapping("/update")
     //@RequiresPermissions("product:category:update")
     public R update(@RequestBody CategoryEntity category){
-		categoryService.updateById(category);
+		categoryService.update(category);
+
+        return R.ok();
+    }
+
+    /**
+     * 修改
+     */
+    @RequestMapping("/updateBatch")
+    //@RequiresPermissions("product:category:update")
+    public R update(@RequestBody CategoryEntity[] categoryList){
+        categoryService.updateBatchById(Arrays.asList(categoryList));
 
         return R.ok();
     }
@@ -82,9 +93,14 @@ public class CategoryController {
     @RequestMapping("/delete")
     //@RequiresPermissions("product:category:delete")
     public R delete(@RequestBody Long[] catIds){
-		categoryService.removeByIds(Arrays.asList(catIds));
+//		categoryService.removeByIds(Arrays.asList(catIds));
+        categoryService.deleteByIds(catIds);
 
         return R.ok();
     }
+
+
+
+
 
 }

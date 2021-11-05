@@ -1,9 +1,13 @@
 package com.xxx.gulimall.product.controller;
 
 import java.util.Arrays;
+import java.util.List;
 import java.util.Map;
 
 //import org.apache.shiro.authz.annotation.RequiresPermissions;
+import com.xxx.gulimall.product.entity.BrandEntity;
+import com.xxx.gulimall.product.entity.CategoryEntity;
+import com.xxx.gulimall.product.service.BrandService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -31,6 +35,8 @@ public class CategoryBrandRelationController {
     @Autowired
     private CategoryBrandRelationService categoryBrandRelationService;
 
+
+
     /**
      * 列表
      */
@@ -40,6 +46,23 @@ public class CategoryBrandRelationController {
         PageUtils page = categoryBrandRelationService.queryPage(params);
 
         return R.ok().put("page", page);
+    }
+
+    @RequestMapping("/catelog/list")
+    public R relationList(@RequestParam("brandId") long brandId){
+
+        List<CategoryBrandRelationEntity> relationEntities = categoryBrandRelationService.listByBrandId(brandId) ;
+
+        return R.ok().put("data", relationEntities);
+    }
+
+    @RequestMapping("/brands/list")
+    //@RequiresPermissions("product:categorybrandrelation:list")
+    public R brandList(@RequestParam("catId") Long catId){
+        List<BrandEntity> brandEntities = categoryBrandRelationService.getBrandList(catId);
+
+
+        return R.ok().put("data", brandEntities);
     }
 
 
@@ -59,8 +82,12 @@ public class CategoryBrandRelationController {
      */
     @RequestMapping("/save")
     //@RequiresPermissions("product:categorybrandrelation:save")
-    public R save(@RequestBody CategoryBrandRelationEntity categoryBrandRelation){
-		categoryBrandRelationService.save(categoryBrandRelation);
+    public R save(@RequestBody CategoryBrandRelationEntity relationEntity){
+        long brandId = relationEntity.getBrandId();
+
+        long catelogId = relationEntity.getCatelogId();
+
+		categoryBrandRelationService.save(brandId, catelogId);
 
         return R.ok();
     }

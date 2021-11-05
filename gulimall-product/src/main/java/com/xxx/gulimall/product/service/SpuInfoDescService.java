@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.extension.service.IService;
 import com.xxx.common.utils.PageUtils;
 import com.xxx.gulimall.product.entity.SpuInfoDescEntity;
 
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -16,5 +17,7 @@ import java.util.Map;
 public interface SpuInfoDescService extends IService<SpuInfoDescEntity> {
 
     PageUtils queryPage(Map<String, Object> params);
+
+    void saveSpuDescipt(Long id, List<String> descript);
 }
 
