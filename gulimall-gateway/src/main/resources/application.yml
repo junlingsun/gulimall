@@ -1,0 +1,67 @@
+spring:
+  cloud:
+    nacos:
+      discovery:
+        server-addr: 127.0.0.1:8848
+
+    loadbalancer:
+      ribbon:
+        enable: false
+
+    gateway:
+      routes:
+
+        - id: product_route
+          uri: lb://gulimallproduct
+          predicates:
+            - Path=/api/product/**
+          filters:
+            - RewritePath=/api/(?<segment>.*),/$\{segment}
+
+
+        - id: thirdparty_route
+          uri: lb://thirdparty
+          predicates:
+            - Path=/api/thirdparty/**
+          filters:
+            - RewritePath=/api/thirdparty/(?<segment>.*),/$\{segment}
+
+        - id: member_route
+          uri: lb://gulimallmember
+          predicates:
+            - Path=/api/member/**
+          filters:
+            - RewritePath=/api/(?<segment>.*),/$\{segment}
+
+        - id: ware_route
+          uri: lb://gulimallware
+          predicates:
+            - Path=/api/ware/**
+          filters:
+            - RewritePath=/api/(?<segment>.*),/$\{segment}
+
+        - id: admin_route
+          uri: lb://admin
+          predicates:
+            - Path=/api/**
+          filters:
+            - RewritePath=/api/(?<segment>.*),/renren-fast/$\{segment}
+
+        - id: host_route
+          uri: lb://gulimallproduct
+          predicates:
+            - Host= gulimall.com
+
+        - id: search_route
+          uri: lb://gulimallelasticsearch
+          predicates:
+            - Host= search.gulimall.com
+
+
+
+
+  application:
+    name: gulimallgateway
+
+server:
+  port: 88

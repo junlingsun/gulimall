@@ -1,0 +1,137 @@
+GET gulimall_product/_search
+{
+  "query": {
+    "bool": {
+      "must": [
+        {
+          "match": {
+            "skuName": "Apple"
+          }
+        }
+      ],
+      "filter": [
+        {"term": {
+          "catalogId": "225"
+        }},
+        {"terms": {
+          "brandId": [
+            "5",
+            "6"
+          ]
+        }},
+        {
+          "nested": {
+            "path": "attrs",
+            "query": {
+              "bool": {
+                "filter": [
+                  {
+                    "term": {
+                      "attrs.attrId": "18"
+                    }
+                  },
+                  {
+                    "terms": {
+                      "attrs.attrValue": [
+                        "Apple"
+                      ]
+                    }
+                  }
+
+                ]
+              }
+            }
+          }
+        },
+        {
+          "term": {
+            "hasStock": "false"
+          }
+        },
+        {
+          "range": {
+            "price": {
+              "gte": 1000,
+              "lte": 7000
+            }
+          }
+        }
+      ]
+    }
+  },
+  "sort": [
+    {
+      "price": {
+        "order": "desc"
+      }
+    }
+  ],
+  "from": 10,
+  "size": 10,
+  "highlight": {
+    "fields": {"skuName": {}},
+    "pre_tags": "<b style='color:red'>",
+    "post_tags": "</b>"
+  },
+  "aggs": {
+    "brand_aggs": {
+      "terms": {
+        "field": "brandId",
+        "size": 10
+      },
+      "aggs": {
+        "brandName_aggs": {
+          "terms": {
+            "field": "brandName",
+            "size": 10
+          }
+        }
+      }
+    },
+
+    "catalog_aggs": {
+      "terms": {
+        "field": "catalogId",
+        "size": 10
+      },
+      "aggs": {
+        "catalogName_aggs": {
+          "terms": {
+            "field": "catalogName",
+            "size": 10
+          }
+        }
+      }
+    },
+
+    "attr_aggs": {
+      "nested": {
+        "path": "attrs"
+      },
+      "aggs": {
+        "attrId_aggs": {
+          "terms": {
+            "field": "attrs.attrId",
+            "size": 10
+          },
+          "aggs": {
+
+            "attrValue_aggs":{
+              "terms": {
+                "field": "attrs.attrValue",
+                "size": 10
+              }
+            },
+
+            "attrName_aggs": {
+              "terms": {
+                "field": "attrs.attrName",
+                "size": 10
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
